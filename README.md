@@ -12,4 +12,4 @@ Auto Script For SSH &amp; OpenVPN Centos & Fedora
 > Whatsapp : <a href="https://wa.me/6285830995000">Click Here</a>
 <br>
 
-<center><h1>© Copyright 2021 By WildyProject</h1></center>
+<center><h1>© Copyright 2021 By <a href="https://t.me/wildyproject">WildyProject</a></h1></center>
