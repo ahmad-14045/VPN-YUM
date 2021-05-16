@@ -1,2 +1,2 @@
-# SSH-OVPN-CENTOS
-Auto Script For SSH &amp; OpenVPN Centos
+# SSH-OVPN-FOR-YUM
+Auto Script For SSH &amp; OpenVPN Centos & Fedora
