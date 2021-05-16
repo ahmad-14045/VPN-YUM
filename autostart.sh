@@ -296,6 +296,7 @@ screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7100 --max-clients 1500
 screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200 --max-clients 1500
 screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1500
 
+rm -f autostart.sh
 # Done
 clear
 neofetch
