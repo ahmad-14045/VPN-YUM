@@ -1,5 +1,5 @@
 #!/bin/bash
-
+clear
 echo "==============================="
 echo "Username          Expred On    "
 echo "==============================="
