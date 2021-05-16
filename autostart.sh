@@ -33,4 +33,18 @@ yum update -y
 yum upgrade -y
 yum install curl -y
 yum install wget -y
+yum install sudo -y
+yum install epel-release -y
+
+# Configure AcceptEnv On SSHD_CONFIG
+sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
+service sshd restart
+
+# Disableing IPV6
+echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+sed -i '$ i\echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
+sed -i '$ i\echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.d/rc.local
+
+# setting repo centos
+yum install -y epel-release
 
