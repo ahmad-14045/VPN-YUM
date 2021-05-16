@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Clear
 clear
 
 # Restarting
@@ -11,4 +12,6 @@ service stunnel restart
 service squid restart
 service wildyproject restart
 
+# Output
+echo ""
 echo "Successfull Restarting Service !"
