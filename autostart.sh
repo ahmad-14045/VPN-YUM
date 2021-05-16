@@ -257,6 +257,11 @@ screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500
 systemctl enable wildyproject
 systemctl start wildyproject
 
+# Bebeb
+echo "clear" >> .bash_profile
+echo "neofetch" >> .bash_profile
+echo "echo 'Script By WildyProject'" >> .bash_profile
+
 # Downloading Menu
 wget -q -O /usr/bin/menu https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/menu.sh
 wget -q -O /usr/bin/addssh https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/addssh.sh
