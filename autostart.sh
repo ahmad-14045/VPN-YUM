@@ -77,7 +77,7 @@ chkconfig sshd on
 
 # Install Dropbear Yum
 yum install dropbear -y
-echo "OPTIONS=\"-b /etc/bannerssh.txt -p 109 -p 456 \"" > /etc/sysconfig/dropbear
+echo "OPTIONS=\"-b /etc/wildyproject/banner -p 110\"" > /etc/sysconfig/dropbear
 echo "/bin/false" >> /etc/shells
 service dropbear restart
 chkconfig dropbear on
@@ -164,7 +164,7 @@ mVHYeF9JUANs1a9K+29W3eJzPDdBAeJzwg==
 END
 
 # Starting Stunnel Service
-wget -O /etc/rc.d/init.d/stunnel
+wget -q -O /etc/rc.d/init.d/stunnel https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/stunnel-init.d
 chmod +x /etc/rc.d/init.d/stunnel
 service stunnel start
 chkconfig stunnel on
