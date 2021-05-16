@@ -40,3 +40,8 @@ do
                 echo "$PID - $USER - $IP";
         fi
 done
+echo "==================================="
+echo " For User Kill Using kill -9 + PID"
+echo "==================================="
+echo "Scrpt By Wildy Project
+
