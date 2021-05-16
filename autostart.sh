@@ -2,8 +2,51 @@
 # Auto Setup SSH VPN Tunneling
 # Supported For Centos 7 , 8 & Fedora 31 , 32 , 33
 # Auther  : Wildy Project ( Wildy Sheverando )
-# License : ©
+# License : MIT License 
 # ======================================================
+
+# License 
+cat > /root/README << END
+MIT License
+
+Copyright (c) 2021 wildyproject
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE
+END
+
+# Read
+clear 
+echo "This Project is Protected By MIT License : "
+echo "============================================================================="
+cat /root/README
+echo "============================================================================="
+echo ""
+echo "Accept The License ? ( Type 'YES' ) For Contitune "
+read -p "Type ( YES/NO ) : " lapet123
+if [[ $lapet123 == "YES" ]]; then
+clear 
+echo "License Accepted "
+else 
+clear
+echo "Sorry Your Not Accept The License "
+exit 1
+fi
 
 # Root Validating
 if [ "${EUID}" -ne 0 ]; then
@@ -28,6 +71,10 @@ else
   exit 1
 fi
 
+# Getting IP
+MYIP=$(curl -s ifconfig.co)
+MYIP2="s/xxxxxxxxx/$MYIP/g"
+
 # Installation && Updating Repository
 yum update -y
 yum upgrade -y
@@ -42,8 +89,6 @@ service sshd restart
 
 # Disableing IPV6
 echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6
-sed -i '$ i\echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
-sed -i '$ i\echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.d/rc.local
 
 # Installing Neofetch 
 # ( Why Not Install From The Official Repository ? 
@@ -67,7 +112,7 @@ service vnstat restart
 chkconfig vnstat on
 
 # Setting Banner && OpenSSH Port
-wget -q -O /etc/wildyproject/banner 
+wget -q -O /etc/wildyproject/banner https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/banner
 mkdir -p /etc/wildyproject/
 echo "banner /etc/wildyproject/banner">> /etc/ssh/sshd_config
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
@@ -77,14 +122,14 @@ chkconfig sshd on
 
 # Install Dropbear Yum
 yum install dropbear -y
-echo "OPTIONS=\"-b /etc/wildyproject/banner -p 110\"" > /etc/sysconfig/dropbear
+echo "OPTIONS=\"-b /etc/wildyproject/banner -p 110 -p 123\"" > /etc/sysconfig/dropbear
 echo "/bin/false" >> /etc/shells
 service dropbear restart
 chkconfig dropbear on
 
 # Install Squid 3 For Yum
 yum install squid -y
-wget -q -O /etc/squid/squid.conf 
+wget -q -O /etc/squid/squid.conf https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/squid.conf
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
@@ -101,7 +146,7 @@ connect = 127.0.0.1:110
 
 [dropbear]
 accept = 990
-connect = 127.0.0.1:143
+connect = 127.0.0.1:123
 END
 
 # Installing Stunnel Certificate
@@ -174,3 +219,79 @@ yum install fail2ban -y
 service fail2ban restart
 chkconfig fail2ban on
 
+# Installing WildyProject Auto Start Service
+cat > /etc/systemd/system/wildyproject.service << END
+[Unit]
+Description=WildyProject Auto Starting Service
+Documentation=https://wildyproject.my.id
+Documentation=https://t.me/wildyproject
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/autorun.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+END
+
+# Make WildyProject Service Configuration 
+cat > /etc/autorun.sh << END
+echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6 # Disable IPV6
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7100 --max-clients 1500 # Running BadVPN
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200 --max-clients 1500 # Running BadVPN
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1500 # RUnning BadVPN
+END
+
+# Giving Permissiong For Autorun
+chmod +x /etc/autorun.sh
+
+# Installing BadVPN
+wget -O /usr/bin/badvpn-udpgw https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/badvpn-udpgw64
+chmod +x /usr/bin/badvpn-udpgw
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7100 --max-clients 500
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200 --max-clients 500
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500
+
+# Starting WildyProject Service
+systemctl enable wildyproject
+systemctl start wildyproject
+
+# Downloading Menu
+wget -q -O /usr/bin/menu https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/menu.sh
+wget -q -O /usr/bin/addssh https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/addssh.sh
+wget -q -O /usr/bin/delssh https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/delssh.sh
+wget -q -O /usr/bin/sshuser https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/sshuser.sh
+wget -q -O /usr/bin/sshlogin https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/sshlogin.sh
+wget -q -O /usr/bin/trialssh https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/trialssh.sh
+wget -q -O /usr/bin/restart https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/restart.sh
+wget -q -O /usr/bin/about https://raw.githubusercontent.com/wildyproject/VPN-YUM/main/Tools/about.sh
+
+# Change Permission
+chmod +x /usr/bin/menu
+chmod +x /usr/bin/addssh
+chmod +x /usr/bin/delssh
+chmod +x /usr/bin/sshuser
+chmod +x /usr/bin/sshlogin
+chmod +x /usr/bin/trialssh
+chmod +x /usr/bin/restart
+chmod +x /usr/bin/about
+
+# Change Time Zone
+ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+# Done / Successfull Installed
+service vnstat restart
+service sshd restart
+service dropbear restart
+service stunnel restart
+service squid restart
+service fail2ban restart
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7100 --max-clients 1500
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200 --max-clients 1500
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1500
+
+# Done
+clear
+neofetch
+echo "Successfull Installed Script"
