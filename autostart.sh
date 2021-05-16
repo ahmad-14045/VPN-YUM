@@ -55,7 +55,7 @@ if [ "${EUID}" -ne 0 ]; then
 fi
 
 # Checking Operating System Information
-OS_MU_LAPET=$( cat /etc/os-release | grep ID | cut -d " " -f 2-3 | head -n1 | sed 's/ID=//g' )
+OS_MU_LAPET=$( cat /etc/os-release | grep ID | cut -d " " -f 2-3 | head -n1 | sed 's/ID=//g' | sed 's/"//g' )
 if [[ $OS_MU_LAPET == "centos" ]]; then
   echo "$OS_MU_LAPET Detected !"
 elif [[ $OS_MU_LAPET == "fedora" ]]; then
