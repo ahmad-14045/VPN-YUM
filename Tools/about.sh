@@ -13,13 +13,12 @@ OS Supported Only For :
 * Fedora 31
 * Fedora 32
 * Fedora 33
-===========================
-Created By WildyProject "
-echo ""
+==========================="
 echo "
 ===========================
        Contact Me : 
 ===========================
 Telegram : @wildyproject
 Whatsapp : +6285830995000
-==========================="
+===========================
+Created By WildyProject "
